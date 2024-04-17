@@ -1,0 +1,29 @@
+[project]
+name = "th1"
+version = "0.2.0"
+authors = [{ name = "Yifei Kong", email = "kong@yifei.me"}]
+description = "TLS and HTTP2 signature and fingerprint library, fork of ts1"
+license = { file = "LICENSE" }
+readme = "README.md"
+dependencies = ["dpkt", "pyyaml"]
+requires-python = ">=3.7"
+urls = { "repository" = "https://github.com/yifeikong/th1" }
+classifiers=[
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["th1", "th1.tls", "th1.http2"]
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff.lint]
+# Enable the isort rules.
+extend-select = ["I"]

@@ -1,0 +1,20 @@
+- name: Start {{ browser.name }}:{{ browser.version }} in docker
+  containers.podman.podman_container:
+    name: "{{ browser.name }}-{{ browser.version}}"
+    image: docker.io/selenium/standalone-{{ browser.name }}:{{ browser.version }}
+    network: host
+    auto_remove: false
+    debug: true
+    publish:
+      - 4444:4444
+      - 7900:7900
+
+- name: Run capture.py
+  script: "capture.py --interface enp0s2"
+  args:
+    executable: python3
+
+- name: Stop browser
+  containers.podman.podman_container:
+    name: "{{ browser.name }}-{{ browser.version}}"
+    state: absent

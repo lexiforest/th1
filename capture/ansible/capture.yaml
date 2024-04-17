@@ -1,0 +1,47 @@
+- hosts: localhost
+  vars:
+    browsers:
+      - { name: chrome, version: "117.0" }
+      - { name: chrome, version: "118.0" }
+      - { name: chrome, version: "119.0" }
+      - { name: chrome, version: "120.0" }
+      - { name: edge, version: "118.0" }
+      - { name: edge, version: "119.0" }
+      - { name: edge, version: "120.0" }
+      - { name: firefox, version: "118.0" }
+      - { name: firefox, version: "119.0" }
+      - { name: firefox, version: "120.0" }
+  connection: local
+  tasks:
+    - name: Install selenium
+      pip:
+        name:
+          - selenium
+          - dpkt
+          - loguru
+    - name: Start {{ browser.name }}:{{ browser.version }} in docker
+      containers.podman.podman_container:
+        name: "{{ browser.name }}-{{ browser.version}}"
+        image: docker.io/selenium/standalone-{{ browser.name }}:{{ browser.version }}
+        network: host
+        auto_remove: false
+        debug: true
+        publish:
+          - 4444:4444
+          - 7900:7900
+      loop: "{{ browsers }}"
+      loop_control:
+        loop_var: browser
+    - name: Ensure containers NOT present
+      containers.podman.podman_container:
+        name: "{{ browser.name }}-{{ browser.version }}"
+        image: docker.io/selenium/standalone-{{ browser.name }}:{{ browser.version }}
+        state: stopped
+      loop: "{{ browsers }}"
+      loop_control:
+        loop_var: browser
+    # - name: Retrieve fingerprints
+    #   include_tasks: inner.yaml
+    #   loop: "{{ browsers }}"
+    #   loop_control:
+    #     loop_var: browser
