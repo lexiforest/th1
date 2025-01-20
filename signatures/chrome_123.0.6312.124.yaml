@@ -128,6 +128,7 @@ signature:
       - 2054
       - 1537
       type: signature_algorithms
+    - type: server_name
     - data: !!binary |
         AA==
       length: 1

@@ -5,6 +5,8 @@ browser:
   os: macOS
   version: 124.0.6367.60
 signature:
+  options:
+    tls_permute_extensions: true
   http2:
     frames:
     - frame_type: SETTINGS
@@ -26,7 +28,6 @@ signature:
       - 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
       - 'sec-ch-ua-mobile: ?0'
       - 'sec-ch-ua-platform: "macOS"'
-      - 'dnt: 1'
       - 'upgrade-insecure-requests: 1'
       - 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
       - 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
@@ -35,7 +36,7 @@ signature:
       - 'sec-fetch-user: ?1'
       - 'sec-fetch-dest: document'
       - 'accept-encoding: gzip, deflate, br, zstd'
-      - 'accept-language: en,zh-CN;q=0.9,zh-TW;q=0.8,zh;q=0.7'
+      - 'accept-language: en-US,en;q=0.9'
       - 'priority: u=0, i'
       pseudo_headers:
       - :method
@@ -80,9 +81,11 @@ signature:
     - key_shares:
       - group: GREASE
         length: 1
+      - group: 25497
+        length: 1216
       - group: 29
         length: 32
-      length: 43
+      length: 1263
       type: keyshare
     - length: 7
       supported_versions:
@@ -105,7 +108,7 @@ signature:
       type: status_request
     - length: 0
       type: session_ticket
-    - length: 10
+    - length: 12
       supported_groups:
       - GREASE
       - 25497
@@ -131,6 +134,7 @@ signature:
       - 2054
       - 1537
       type: signature_algorithms
+    - type: server_name
     - data: !!binary |
         AA==
       length: 1

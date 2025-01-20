@@ -16,7 +16,7 @@ def _process_settings_frame(lines) -> List[Tuple[int, int]]:
     settings = []
     for _ in range(niv):
         line = next(lines)
-        match = re.match(r"\s*\[[A-Z_]+\(0x(\d+)\):(\d+)\]", line)
+        match = re.match(r"\s*\[[A-Z0-9_]+\(0x(\d+)\):(\d+)\]", line)
         if not match:
             raise Exception(f"Malformed log: unexpected line '{line}'")
 
