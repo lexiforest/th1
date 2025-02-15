@@ -44,6 +44,7 @@ class TLSExtensionType(enum.IntEnum):
     # See https://tools.ietf.org/id/draft-agl-tls-nextprotoneg-03.html
     next_protocol_negotiation = 13172
     application_settings = 17513
+    application_settings_new = 17613
     renegotiation_info = 65281
     encrypted_client_hello = 0xFE0D
     ech_outer_extensions = 0xFD00
@@ -563,6 +564,28 @@ class TLSExtensionNextProtocolNegotiation(
 
 class TLSExtensionApplicationSettings(
     TLSExtensionSignature, ext_type=TLSExtensionType.application_settings
+):
+    def __init__(self, length, alps_alpn_list):
+        super().__init__(length=length)
+        self.alps_alpn_list = alps_alpn_list
+
+    def to_dict(self):
+        d = super().to_dict()
+        d["alps_alpn_list"] = self.alps_alpn_list
+        return d
+
+    @classmethod
+    def from_dict(cls, d):
+        return cls(**d)
+
+    @classmethod
+    def from_bytes(cls, length: int, data: bytes):
+        alpn, _ = parse_tls_str_list(data)
+        return cls(length, alpn)
+
+
+class TLSExtensionApplicationSettingsNew(
+    TLSExtensionSignature, ext_type=TLSExtensionType.application_settings_new
 ):
     def __init__(self, length, alps_alpn_list):
         super().__init__(length=length)
