@@ -173,7 +173,7 @@ class TLSClientHelloSignature(Signature):
         if self.ciphersuites != other.ciphersuites:
             msg = (
                 f"TLS ciphersuites differ in contents or order. "
-                f"{self._compare_extensions} != {other.ciphersuites}"
+                f"{self.ciphersuites} != {other.ciphersuites}"
             )
             return False, msg
 
