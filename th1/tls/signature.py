@@ -171,11 +171,17 @@ class TLSClientHelloSignature(Signature):
             return False, msg
 
         if self.ciphersuites != other.ciphersuites:
-            msg = "TLS ciphersuites differ in contents or order. "
+            msg = (
+                f"TLS ciphersuites differ in contents or order. "
+                f"{self._compare_extensions} != {other.ciphersuites}"
+            )
             return False, msg
 
         if self.comp_methods != other.comp_methods:
-            msg = "TLS compression methods differ in contents or order. "
+            msg = (
+                "TLS compression methods differ in contents or order. "
+                f"{self.comp_methods} != {other.comp_methods}"
+            )
             return False, msg
 
         return self._compare_extensions(other, allow_tls_permutation)

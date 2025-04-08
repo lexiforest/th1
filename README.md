@@ -15,7 +15,8 @@ th1 was created as part of the work on [curl-impersonate](https://github.com/lwt
 ### Installation
 
 ```
-pip install th1-signatures
+# not working
+# pip install th1-signatures
 ```
 
 ## TLS fingerprint
