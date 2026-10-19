@@ -45,6 +45,7 @@ class TLSExtensionType(enum.IntEnum):
     next_protocol_negotiation = 13172
     application_settings = 17513
     application_settings_new = 17613
+    trust_anchors = 51764
     renegotiation_info = 65281
     encrypted_client_hello = 0xFE0D
     ech_outer_extensions = 0xFD00
@@ -604,6 +605,20 @@ class TLSExtensionApplicationSettingsNew(
     def from_bytes(cls, length: int, data: bytes):
         alpn, _ = parse_tls_str_list(data)
         return cls(length, alpn)
+
+
+class TLSExtensionTrustAnchors(
+    TLSExtensionSignature, ext_type=TLSExtensionType.trust_anchors
+):
+    """Fingerprint the trust_anchors extension by its type and length."""
+
+    @classmethod
+    def from_dict(cls, d):
+        return cls(**d)
+
+    @classmethod
+    def from_bytes(cls, length: int, data: bytes):
+        return cls(length)
 
 
 class TLSExtensionGrease(
