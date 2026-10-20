@@ -109,6 +109,41 @@ with open("/path/to/pcap", "rb") as pcap:
         ))
 ```
 
+### Partial TLS expectations
+
+Use `TLSClientHelloExpectation` to check selected fields of a captured
+`TLSClientHelloSignature`. Expectations use the same dictionary format as
+`signature.to_dict()`, without requiring all fields:
+
+```python
+from th1.tls import TLSClientHelloExpectation
+
+expectation = TLSClientHelloExpectation.from_dict({
+    "handshake_version": "TLS_VERSION_1_2",
+    "session_id_length": 32,
+})
+matched, reason = expectation.matches(signature)
+assert matched, reason
+```
+
+Only supplied dictionary fields are compared, including nested extension and
+key-share fields. For example, `{"type": "trust_anchors"}` checks an extension's
+type without constraining its length. Each extension entry must supply its type.
+Omitted fields impose no constraint; zero, `None`, and empty lists are explicit
+values, not wildcards. An empty expectation `{}` matches any TLS signature.
+
+Supplied lists describe the **complete list**, including its order and number of
+entries. Supplying `"extensions": []` therefore requires no extensions; omitting
+`extensions` skips that check. To allow ordinary extensions to change order, use
+`expectation.matches(signature, allow_tls_permutation=True)`. GREASE, PSK, and
+padding must retain their positions, and other lists remain ordered. Explicit
+expectations compare PSK and padding too, without the filtering used by
+`TLSClientHelloSignature.equals()`.
+
+`matches()` returns `(True, "")` on success or `(False, reason)` with the field
+path on failure. `expectation.to_dict()` preserves exactly the supplied fields.
+Full-signature deserialization and equality retain their existing behavior.
+
 ## HTTP/2 fingerprint
 Each web client that supports HTTP/2 sends multiple HTTP/2 frames upon initiating a connection to a server.
 These frames contain various settings configured by the client.

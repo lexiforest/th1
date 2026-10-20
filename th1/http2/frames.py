@@ -46,8 +46,15 @@ class HTTP2SettingsFrame(HTTP2FrameSignature, frame_type="SETTINGS"):
     # to similarity with TLS GREASE
     HTTP2_GREASE = "GREASE"
 
-    # See RFC7540, section "Defined SETTINGS parameters"
-    VALID_SETTINGS = [1, 2, 3, 4, 5, 6]
+    # Registered HTTP/2 settings, including extension settings:
+    # https://www.iana.org/assignments/http2-parameters/#settings
+    VALID_SETTINGS = [
+        1, 2, 3, 4, 5, 6,  # RFC 9113
+        8,  # SETTINGS_ENABLE_CONNECT_PROTOCOL (RFC 8441)
+        9,  # SETTINGS_NO_RFC7540_PRIORITIES (RFC 9218)
+        0x10,  # TLS_RENEG_PERMITTED (MS-HTTP2E)
+        0x4D44,  # SETTINGS_ENABLE_METADATA
+    ]
 
     def __init__(self, stream_id: Optional[int], settings: list[tuple[int, int]]):
         super().__init__(stream_id)
